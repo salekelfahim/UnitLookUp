@@ -5,32 +5,21 @@ const puppeteer = require('puppeteer');
  * @returns {Object} - Puppeteer browser instance
  */
 async function createBrowserInstance() {
-  // Check if running in Railway environment
-  const isRailway = process.env.RAILWAY_ENVIRONMENT === 'true';
-  
-  const puppeteerOptions = {
+  const options = {
     headless: "new",
     args: [
       '--no-sandbox',
       '--disable-setuid-sandbox',
       '--disable-dev-shm-usage',
-      '--disable-accelerated-2d-canvas',
-      '--no-first-run',
-      '--no-zygote',
       '--disable-gpu',
-      '--disable-web-security',
-      '--disable-features=VizDisplayCompositor',
-      '--single-process', // Add this for Railway
-      '--disable-features=site-per-process' // Add this for Railway
-    ]
+      '--disable-software-rasterizer',
+      '--disable-features=site-per-process',
+      '--single-process'
+    ],
+    executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || null
   };
   
-  // Use a specific executable path if defined in environment
-  if (process.env.PUPPETEER_EXECUTABLE_PATH) {
-    puppeteerOptions.executablePath = process.env.PUPPETEER_EXECUTABLE_PATH;
-  }
-  
-  return await puppeteer.launch(puppeteerOptions);
+  return await puppeteer.launch(options);
 }
 
 /**

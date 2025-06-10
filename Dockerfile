@@ -1,6 +1,6 @@
 FROM node:18-slim
 
-# Install latest Chrome and dependencies
+# Install Chrome dependencies and Chrome itself
 RUN apt-get update \
     && apt-get install -y wget gnupg \
     && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/googlechrome-linux-keyring.gpg \
@@ -13,21 +13,25 @@ RUN apt-get update \
 # Create and set working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json
+# Skip Puppeteer download during installation
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome-stable
+
+# Copy package.json first to leverage Docker cache
 COPY package*.json ./
 
-# Install dependencies
-RUN npm install
+# Install production dependencies only to speed up build
+RUN npm ci --only=production
 
-# Copy application code
+# Copy application files
 COPY . .
 
-# Set environment variable to tell app it's running in Railway
-ENV RAILWAY_ENVIRONMENT=true
-
-# Expose port - Railway will override this with their PORT env variable
+# Set environment variables
+ENV NODE_ENV=production
 ENV PORT=3002
+
+# Expose the port
 EXPOSE 3002
 
-# Command to run the application
+# Start command
 CMD ["node", "app.js"]
