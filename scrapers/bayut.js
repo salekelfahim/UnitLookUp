@@ -5,9 +5,11 @@ const puppeteer = require('puppeteer');
  * @returns {Object} - Puppeteer browser instance
  */
 async function createBrowserInstance() {
-  return await puppeteer.launch({
+  // Check if running in Railway environment
+  const isRailway = process.env.RAILWAY_ENVIRONMENT === 'true';
+  
+  const puppeteerOptions = {
     headless: "new",
-    executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || null,
     args: [
       '--no-sandbox',
       '--disable-setuid-sandbox',
@@ -17,9 +19,18 @@ async function createBrowserInstance() {
       '--no-zygote',
       '--disable-gpu',
       '--disable-web-security',
-      '--disable-features=VizDisplayCompositor'
+      '--disable-features=VizDisplayCompositor',
+      '--single-process', // Add this for Railway
+      '--disable-features=site-per-process' // Add this for Railway
     ]
-  });
+  };
+  
+  // Use a specific executable path if defined in environment
+  if (process.env.PUPPETEER_EXECUTABLE_PATH) {
+    puppeteerOptions.executablePath = process.env.PUPPETEER_EXECUTABLE_PATH;
+  }
+  
+  return await puppeteer.launch(puppeteerOptions);
 }
 
 /**
