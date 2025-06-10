@@ -1,0 +1,50 @@
+const mongoose = require('mongoose');
+
+const cleanPropertySchema = new mongoose.Schema({
+  Date: { type: Date },
+  MasterProject: { type: String },
+  Project: { type: String },
+  AreaName: { type: String, default: null },
+  BuildingName: { type: String, default: null },
+  Size: { type: Number },
+  ActualSize: { type: Number, default: null },
+  BuiltUp: { type: Number, default: null },
+  PlotSize: { type: Number, default: null },
+  PropertyType: { type: String },
+  UnitNumber: { type: String, default: null },
+  BuildingNumber: { type: String },
+  PlotPreRegNumber: { type: String },
+  LandNumber: { type: String },
+  PlotNumber: { type: String, default: null },
+  ProcedureType: { type: String },
+  ProcedureName: { type: String },
+  ProcedureValue: { type: Number, default: null },
+  Owner: { type: String },
+  Phone: { type: String },
+  "Phone 1": { type: String, default: null },
+  "Phone 2": { type: String, default: null },
+  "Phone 3": { type: String, default: null },
+  "Phone 4": { type: String, default: null },
+  Email: { type: String, default: null },
+  Country: { type: String },
+  IDNumber: { type: String },
+  UAEIDNumber: { type: String },
+  Passport: { type: String, default: null },
+  PassportExpiryDate: { type: Date },
+  BirthDate: { type: Date },
+  DMNo: { type: String },
+  DMSubNo: { type: String, default: null },
+  LandSubNumber: { type: String, default: null },
+  CompletionStatus: { type: String, default: null },
+  Usage: { type: String, default: null },
+  Bedroom: { type: Number, default: null },
+  Bathroom: { type: Number, default: null },
+  UnifiedNumber: { type: String, default: null },
+  MunicipalityNo: { type: String, default: null },
+  MunicipalitySubNo: { type: String, default: null }
+}, {
+  collection: 'properties',
+  timestamps: true
+});
+
+module.exports = mongoose.model('CleanProperty', cleanPropertySchema);

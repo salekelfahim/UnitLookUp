@@ -1,0 +1,9 @@
+{
+  "name": "unit-finder",
+  "version": "1.0.0",
+  "buildTag": "latest",
+  "dockerfile": "./Dockerfile",
+  "env": {
+    "MONGODB_URI": "mongodb://your-mongodb-connection-string"
+  }
+}
